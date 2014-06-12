@@ -2,14 +2,19 @@ package chapter5.chocolate;
 
 public class ChocolateBoiler {
 
-	private static ChocolateBoiler  instance;
+	private static volatile ChocolateBoiler  instance;
 	
 	private boolean empty;
 	private boolean boiled;
 	
+	/* Double check to solve potential problem in multithread programming. */
 	public ChocolateBoiler getInstance () {
 		if ( instance == null ) {
-			instance  =  new ChocolateBoiler();
+			synchronized ( ChocolateBoiler.class ) {
+				if ( instance == null ) {
+					instance  =  new ChocolateBoiler();
+				}
+			}
 		}
 		return instance;
 	}
